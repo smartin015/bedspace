@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/107613__robinhood76__02156-laser-shot.wav-685b31b5cca4bd35b8e381f454cdedcc.sample"
+
+[deps]
+
+source_file="res://sfx/107613__robinhood76__02156-laser-shot.wav"
+dest_files=[ "res://.import/107613__robinhood76__02156-laser-shot.wav-685b31b5cca4bd35b8e381f454cdedcc.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,6 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://demo_scenes/Ship.gd" type="Script" id=1]
+[ext_resource path="res://trail_tex.bmp" type="Texture" id=2]
+[ext_resource path="res://sfx/thrusters_loop.wav" type="AudioStream" id=3]
+[ext_resource path="res://fire.png" type="Texture" id=4]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 0.1, 0.1, 0.2 )
@@ -8,19 +11,48 @@ size = Vector3( 0.1, 0.1, 0.2 )
 [sub_resource type="PrismMesh" id=2]
 size = Vector3( 0.1, 0.1, 0.1 )
 
-[sub_resource type="Curve3D" id=3]
+[sub_resource type="SpatialMaterial" id=3]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_blend_mode = 1
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 4 )
+
+[sub_resource type="QuadMesh" id=4]
+material = SubResource( 3 )
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.5, 0.351351 ), -1.57658, -1.57658, 0, 0, Vector2( 0.997143, 0.0135136 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0.0397351, 0.509934, 1 )
+colors = PoolColorArray( 0.295918, 0.438935, 1, 1, 0.294702, 0.294702, 0.294702, 1, 0, 0, 0, 0 )
+
+[sub_resource type="Curve3D" id=7]
 _data = {
 "points": PoolVector3Array(  ),
 "tilts": PoolRealArray(  )
 }
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=8]
 flags_transparent = true
 flags_unshaded = true
 albedo_color = Color( 0.603922, 0.435294, 0.435294, 1 )
+albedo_texture = ExtResource( 2 )
+uv1_scale = Vector3( 0.15, 0.15, 0.15 )
+
+[sub_resource type="BoxShape" id=9]
+extents = Vector3( 0.05, 0.05, 0.15 )
 
 [node name="Ship" type="RigidBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.894062, 7.6138, 0 )
+collision_layer = 2
+collision_mask = 2
 mass = 50.0
 gravity_scale = 0.0
 custom_integrator = true
@@ -40,11 +72,28 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0
 mesh = SubResource( 2 )
 material/0 = null
 
+[node name="ThrustParticles" type="CPUParticles" parent="ShipBody"]
+amount = 50
+randomness = 0.1
+local_coords = false
+mesh = SubResource( 4 )
+direction = Vector3( 0, 0, -1 )
+spread = 10.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 1.0
+initial_velocity_random = 0.1
+angular_velocity = 30.0
+angular_velocity_random = 1.0
+angle = 360.0
+angle_random = 1.0
+scale_amount_curve = SubResource( 5 )
+color_ramp = SubResource( 6 )
+
 [node name="Trail" type="Path" parent="."]
-curve = SubResource( 3 )
+curve = SubResource( 7 )
 
 [node name="CSGPolygon" type="CSGPolygon" parent="Trail"]
-polygon = PoolVector2Array( 0, 0, 0, 0.05, 0.05, 0.05, 0.05, 0 )
+polygon = PoolVector2Array( 0, 0, 0, 0.05, 0.05, 0.05 )
 mode = 2
 path_node = NodePath("..")
 path_interval = 0.1
@@ -52,4 +101,23 @@ path_rotation = 1
 path_local = false
 path_continuous_u = true
 path_joined = false
-material = SubResource( 4 )
+material = SubResource( 8 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05 )
+shape = SubResource( 9 )
+
+[node name="DebrisCollider" type="Area" parent="."]
+gravity = 0.0
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2" type="CollisionShape" parent="DebrisCollider"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05 )
+shape = SubResource( 9 )
+
+[node name="ThrustSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="PickupWarp" type="AudioStreamPlayer3D" parent="."]
+[connection signal="area_entered" from="DebrisCollider" to="." method="_on_DebrisCollider_area_entered"]

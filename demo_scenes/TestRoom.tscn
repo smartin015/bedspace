@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://demo_scenes/TestRoom.gd" type="Script" id=1]
 [ext_resource path="res://OQ_Toolkit/OQ_LeftController.tscn" type="PackedScene" id=2]
@@ -7,13 +7,33 @@
 [ext_resource path="res://Ship.tscn" type="PackedScene" id=5]
 [ext_resource path="res://OQ_Toolkit/OQ_RightController.tscn" type="PackedScene" id=6]
 [ext_resource path="res://OQ_Toolkit/OQ_ARVRCamera.tscn" type="PackedScene" id=7]
+[ext_resource path="res://stars_panorama.png" type="Texture" id=8]
+[ext_resource path="res://demo_scenes/Planet.gd" type="Script" id=9]
+[ext_resource path="res://Stats.tscn" type="PackedScene" id=10]
+[ext_resource path="res://sfx/track_orbit.ogg" type="AudioStream" id=11]
 
-[sub_resource type="Environment" id=1]
+[sub_resource type="PanoramaSky" id=1]
+panorama = ExtResource( 8 )
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+background_energy = 0.4
 ambient_light_color = Color( 0.4, 0.4, 0.4, 1 )
 
-[sub_resource type="SphereMesh" id=2]
+[sub_resource type="SphereMesh" id=3]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereShape" id=4]
+radius = 0.1
+
+[sub_resource type="SphereMesh" id=5]
+radius = 0.05
+height = 0.1
+
+[sub_resource type="SphereShape" id=6]
 radius = 0.15
-height = 0.3
 
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
@@ -34,10 +54,10 @@ visible = false
 [node name="Feature_VRSimulator" parent="OQ_ARVROrigin" instance=ExtResource( 3 )]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 1 )
+environment = SubResource( 2 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.74818, -0.610891, -0.258918, 0.658962, 0.638612, 0.397422, -0.0774335, -0.46796, 0.880351, 0, -4.85217, 1.82761 )
+transform = Transform( 0.74818, -0.610891, -0.258918, 0.433445, 0.745469, -0.50636, 0.502346, 0.266622, 0.822533, 0, -4.85217, 1.82761 )
 
 [node name="GameSpace" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0 )
@@ -46,24 +66,58 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0 )
 
 [node name="Planet" type="RigidBody" parent="GameSpace/GravityBodies"]
 mode = 1
-mass = 1000.0
+mass = 2000.0
 gravity_scale = 0.0
+script = ExtResource( 9 )
 
 [node name="PlanetBody" type="MeshInstance" parent="GameSpace/GravityBodies/Planet"]
-mesh = SubResource( 2 )
+mesh = SubResource( 3 )
 material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="GameSpace/GravityBodies/Planet"]
+shape = SubResource( 4 )
+
+[node name="Area" type="Area" parent="GameSpace/GravityBodies/Planet"]
+monitoring = false
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2" type="CollisionShape" parent="GameSpace/GravityBodies/Planet/Area"]
+shape = SubResource( 4 )
 
 [node name="Planet2" type="RigidBody" parent="GameSpace/GravityBodies"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.364, 0, 0 )
 mode = 1
-mass = 500.0
+mass = 1000.0
 gravity_scale = 0.0
+script = ExtResource( 9 )
 
 [node name="PlanetBody" type="MeshInstance" parent="GameSpace/GravityBodies/Planet2"]
-mesh = SubResource( 2 )
+mesh = SubResource( 5 )
 material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="GameSpace/GravityBodies/Planet2"]
+shape = SubResource( 6 )
+
+[node name="Area" type="Area" parent="GameSpace/GravityBodies/Planet2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.364, 0, 0 )
+monitoring = false
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2" type="CollisionShape" parent="GameSpace/GravityBodies/Planet2/Area"]
+shape = SubResource( 4 )
 
 [node name="Actor" type="Spatial" parent="GameSpace"]
 
 [node name="Ship" parent="GameSpace/Actor" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.894, 0, 0 )
+
+[node name="Stats" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, -1, 3.25841e-07, 0, -3.25841e-07, -1, 0, 9.42928, 4.48975 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+volume_db = -30.0
+autoplay = true
+[connection signal="ship_stats_change" from="GameSpace/Actor/Ship" to="." method="_on_Ship_ship_stats_change"]

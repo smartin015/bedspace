@@ -1,16 +1,41 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://demo_scenes/Debris.gd" type="Script" id=1]
+[ext_resource path="res://sfx/94762__robinhood76__01574-distant-explosion.wav" type="AudioStream" id=2]
 
 [sub_resource type="PlaneMesh" id=1]
 flip_faces = true
 size = Vector2( 0.05, 0.05 )
 
+[sub_resource type="SphereShape" id=2]
+radius = 0.05
+
+[sub_resource type="SphereShape" id=3]
+radius = 0.1
+
 [node name="Debris" type="RigidBody"]
 gravity_scale = 0.0
 custom_integrator = true
+contacts_reported = 1
+contact_monitor = true
 script = ExtResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
 material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 2 )
+
+[node name="ShipCollider" type="Area" parent="."]
+gravity = 0.0
+monitoring = false
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="ShipCollider"]
+shape = SubResource( 3 )
+
+[node name="Collision" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 2 )
+[connection signal="body_entered" from="." to="." method="_on_Debris_body_entered"]

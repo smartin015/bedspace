@@ -63,6 +63,7 @@ config/icon="res://icon.png"
 [autoload]
 
 vr="*res://OQ_Toolkit/vr_autoload.gd"
+S="*res://S.gd"
 
 [display]
 

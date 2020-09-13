@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/87529__robinhood76__01448-distant-big-explosion-2.wav-3e1c0bac99ec3e1b1fb30d3e26dcd32c.sample"
+
+[deps]
+
+source_file="res://sfx/87529__robinhood76__01448-distant-big-explosion-2.wav"
+dest_files=[ "res://.import/87529__robinhood76__01448-distant-big-explosion-2.wav-3e1c0bac99ec3e1b1fb30d3e26dcd32c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

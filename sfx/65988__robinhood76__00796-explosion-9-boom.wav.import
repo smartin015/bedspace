@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/65988__robinhood76__00796-explosion-9-boom.wav-d4d50c3efccf5bc619e012077f0ebc36.sample"
+
+[deps]
+
+source_file="res://sfx/65988__robinhood76__00796-explosion-9-boom.wav"
+dest_files=[ "res://.import/65988__robinhood76__00796-explosion-9-boom.wav-d4d50c3efccf5bc619e012077f0ebc36.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

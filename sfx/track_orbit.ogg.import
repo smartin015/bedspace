@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/track_orbit.ogg-464e49f2859a1063eba9793dbb017975.oggstr"
+
+[deps]
+
+source_file="res://sfx/track_orbit.ogg"
+dest_files=[ "res://.import/track_orbit.ogg-464e49f2859a1063eba9793dbb017975.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/274208__littlerobotsoundfactory__whoosh-electric-03.wav-92024b023542c54b27787627b545b778.sample"
+
+[deps]
+
+source_file="res://sfx/274208__littlerobotsoundfactory__whoosh-electric-03.wav"
+dest_files=[ "res://.import/274208__littlerobotsoundfactory__whoosh-electric-03.wav-92024b023542c54b27787627b545b778.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
